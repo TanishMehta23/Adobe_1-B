@@ -1,0 +1,50 @@
+{
+  "filename": "sample.pdf",
+  "file_size": 984239,
+  "file_type": ".pdf",
+  "status": "success",
+  "metadata": {
+    "file_size": 984239,
+    "created_time": "2025-07-25T21:50:18.215161",
+    "modified_time": "2025-07-25T15:21:19.007648",
+    "file_hash": "46ad5fb484ff4ed860f4e59c1d92592a",
+    "extension": ".pdf",
+    "encoding": "binary"
+  },
+  "analysis": {
+    "content_type": ".pdf",
+    "size_analysis": {},
+    "text_content": "ADDRESS: \nTOPJUMP \n3735 PARKWAY \nPIGEON FORGE, TN 37863 \n(NEAR DIXIE STAMPEDE ON THE PARKWAY) \nRSVP: ----------------\nCLOSED TOED SHOES ARE REQUIRED FOR CLIMBING \nPARENTS OR GUARDIANS NOT ATTENDING THE PARTY, \nPLEASE VISIT TOPJUMP.COM TO FILL OUT WAIVER \nSO YOUR CHILD CAN ATTEND. \nHOPE To SEE You THERE! \nWWW.TOPJUMP.COM",
+    "page_count": 1,
+    "metadata": {
+      "format": "PDF 1.6",
+      "title": "TOPJUMP - PARTY INVITATION 20161003 V01.cdr",
+      "author": "Art",
+      "subject": "",
+      "keywords": "",
+      "creator": "CorelDRAW X6",
+      "producer": "Adobe Acrobat Pro DC (32-bit) 21 Paper Capture Plug-in",
+      "creationDate": "D:20161021124306-04'00'",
+      "modDate": "D:20250715114143+05'30'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_analysis": {
+      "character_count": 321,
+      "word_count": 48,
+      "line_count": 12,
+      "paragraph_count": 1,
+      "avg_words_per_page": 48.0,
+      "has_content": true,
+      "content_preview": "ADDRESS: \nTOPJUMP \n3735 PARKWAY \nPIGEON FORGE, TN 37863 \n(NEAR DIXIE STAMPEDE ON THE PARKWAY) \nRSVP: ----------------\nCLOSED TOED SHOES ARE REQUIRED FOR CLIMBING \nPARENTS OR GUARDIANS NOT ATTENDING THE PARTY, \nPLEASE VISIT TOPJUMP.COM TO FILL OUT WAIVER \nSO YOUR CHILD CAN ATTEND. \nHOPE To SEE You THERE! \nWWW.TOPJUMP.COM"
+    },
+    "processing_method": "advanced_pdf_extraction"
+  },
+  "processed_data": {
+    "processing_method": "standard_pdf_processing",
+    "processed_at": "2025-07-25T21:58:19.911270",
+    "generic_processing": true,
+    "content_signature": "46ad5fb4"
+  },
+  "timestamp": "2025-07-25T21:58:19.911270"
+}

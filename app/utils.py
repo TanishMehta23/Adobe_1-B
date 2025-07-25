@@ -5,7 +5,101 @@ from datetime import datetime
 from pathlib import Path
 import logging
 
+# PDF processing imports
+try:
+    import PyPDF2
+    import pdfplumber
+    import fitz  # PyMuPDF
+    PDF_PROCESSING_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"PDF processing libraries not available: {e}")
+    PDF_PROCESSING_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
+
+def process_pdf_content(file_path):
+    """Extract comprehensive information from PDF files."""
+    if not PDF_PROCESSING_AVAILABLE:
+        return {"error": "PDF processing libraries not available"}
+    
+    try:
+        pdf_info = {
+            "text_content": "",
+            "page_count": 0,
+            "metadata": {},
+            "text_analysis": {},
+            "processing_method": "advanced_pdf_extraction"
+        }
+        
+        # Method 1: Using PyMuPDF (fitz) for comprehensive extraction
+        try:
+            with fitz.open(file_path) as doc:
+                pdf_info["page_count"] = len(doc)
+                pdf_info["metadata"] = doc.metadata
+                
+                # Extract text from all pages
+                full_text = ""
+                for page_num in range(len(doc)):
+                    page = doc[page_num]
+                    full_text += page.get_text() + "\n"
+                
+                pdf_info["text_content"] = full_text.strip()
+                
+        except Exception as e:
+            logger.warning(f"PyMuPDF extraction failed: {e}, trying PyPDF2")
+            
+            # Method 2: Fallback to PyPDF2
+            try:
+                with open(file_path, 'rb') as file:
+                    reader = PyPDF2.PdfReader(file)
+                    pdf_info["page_count"] = len(reader.pages)
+                    
+                    # Extract metadata
+                    if reader.metadata:
+                        pdf_info["metadata"] = {
+                            "title": reader.metadata.get('/Title', ''),
+                            "author": reader.metadata.get('/Author', ''),
+                            "subject": reader.metadata.get('/Subject', ''),
+                            "creator": reader.metadata.get('/Creator', ''),
+                            "producer": reader.metadata.get('/Producer', ''),
+                            "creation_date": str(reader.metadata.get('/CreationDate', '')),
+                            "modification_date": str(reader.metadata.get('/ModDate', ''))
+                        }
+                    
+                    # Extract text
+                    full_text = ""
+                    for page in reader.pages:
+                        full_text += page.extract_text() + "\n"
+                    
+                    pdf_info["text_content"] = full_text.strip()
+                    
+            except Exception as e2:
+                logger.error(f"PyPDF2 extraction also failed: {e2}")
+                pdf_info["error"] = f"Text extraction failed: {str(e2)}"
+        
+        # Analyze extracted text
+        if pdf_info["text_content"]:
+            text = pdf_info["text_content"]
+            pdf_info["text_analysis"] = {
+                "character_count": len(text),
+                "word_count": len(text.split()),
+                "line_count": len(text.splitlines()),
+                "paragraph_count": len([p for p in text.split('\n\n') if p.strip()]),
+                "avg_words_per_page": len(text.split()) / pdf_info["page_count"] if pdf_info["page_count"] > 0 else 0,
+                "has_content": len(text.strip()) > 0,
+                "content_preview": text[:500] + "..." if len(text) > 500 else text
+            }
+        else:
+            pdf_info["text_analysis"] = {
+                "has_content": False,
+                "extraction_status": "no_text_extracted_or_image_based_pdf"
+            }
+        
+        return pdf_info
+        
+    except Exception as e:
+        logger.error(f"PDF processing failed: {e}")
+        return {"error": f"PDF processing failed: {str(e)}"}
 
 def extract_metadata(file_path, content):
     try:
@@ -31,14 +125,20 @@ def extract_metadata(file_path, content):
         logger.error(f"Error extracting metadata: {str(e)}")
         return {"error": str(e)}
 
-def analyze_file_content(content, file_type):
+def analyze_file_content(content, file_type, file_path=None):
     try:
         analysis = {
             "content_type": file_type,
             "size_analysis": {}
         }
         
-        if file_type in ['.txt', '.json', '.csv', '.md']:
+        # Special handling for PDF files
+        if file_type == '.pdf' and file_path:
+            pdf_analysis = process_pdf_content(file_path)
+            analysis.update(pdf_analysis)
+            return analysis
+        
+        elif file_type in ['.txt', '.json', '.csv', '.md']:
             if isinstance(content, str):
                 analysis.update({
                     "character_count": len(content),

@@ -64,7 +64,7 @@ def process_single_file(file_path):
         
         metadata = extract_metadata(file_path, content)
         
-        analysis_result = analyze_file_content(content, file_path.suffix.lower())
+        analysis_result = analyze_file_content(content, file_path.suffix.lower(), file_path)
         
         processed_data = process_data(content, file_path.suffix.lower())
         
