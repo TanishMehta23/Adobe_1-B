@@ -24,8 +24,23 @@ python main.py
 # Build
 docker build --platform linux/amd64 -t challenge-1b .
 
-# Run
+# Run (Windows PowerShell)
+docker run --rm -v ${PWD}/input:/app/input:ro -v ${PWD}/output:/app/output --network none challenge-1b
+
+# Run (Windows Command Prompt)
+docker run --rm -v %cd%/input:/app/input:ro -v %cd%/output:/app/output --network none challenge-1b
+
+# Run (Linux/Mac)
 docker run --rm -v $(pwd)/input:/app/input:ro -v $(pwd)/output:/app/output --network none challenge-1b
+```
+
+### 🚀 Easy Docker Run (Windows)
+```bash
+# Using batch script
+run_docker.bat
+
+# Using PowerShell script
+.\run_docker.ps1
 ```
 
 ## How it works

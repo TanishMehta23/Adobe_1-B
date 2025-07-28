@@ -68,16 +68,23 @@ def process_single_file(file_path):
         
         processed_data = process_data(content, file_path.suffix.lower())
         
-        result = {
-            "filename": file_path.name,
-            "file_size": file_path.stat().st_size,
-            "file_type": file_path.suffix.lower(),
-            "status": "success",
-            "metadata": metadata,
-            "analysis": analysis_result,
-            "processed_data": processed_data,
-            "timestamp": datetime.now().isoformat(),
-        }
+        # Special handling for challenge data - output directly in desired format
+        if (file_path.suffix.lower() == '.json' and 
+            isinstance(processed_data, dict) and 
+            ("metadata" in processed_data and "extracted_sections" in processed_data) or
+            ("challenge_info" in processed_data and "documents" in processed_data)):
+            result = processed_data
+        else:
+            result = {
+                "filename": file_path.name,
+                "file_size": file_path.stat().st_size,
+                "file_type": file_path.suffix.lower(),
+                "status": "success",
+                "metadata": metadata,
+                "analysis": analysis_result,
+                "processed_data": processed_data,
+                "timestamp": datetime.now().isoformat(),
+            }
         
         return result
         
